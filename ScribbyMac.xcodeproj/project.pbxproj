@@ -1,0 +1,221 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		AA0000000000000000000016 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AA0000000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AA0000000000000000000004;
+			remoteInfo = ScribbyMac;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		AA0000000000000000000007 /* ScribbyMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScribbyMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA0000000000000000000008 /* ScribbyMacTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ScribbyMacTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		AA0000000000000000000018 /* Exceptions for ScribbyMac folder in ScribbyMac target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Resources/Info.plist,
+			);
+			target = AA0000000000000000000004 /* ScribbyMac */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		AA0000000000000000000002 /* ScribbyMac */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (AA0000000000000000000018 /* Exceptions for ScribbyMac folder in ScribbyMac target */);
+			path = ScribbyMac;
+			sourceTree = "<group>";
+		};
+		AA0000000000000000000003 /* ScribbyMacTests */ = {isa = PBXFileSystemSynchronizedRootGroup; path = ScribbyMacTests; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AA0000000000000000000009 /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		AA000000000000000000000A /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		AA000000000000000000000B = {
+			isa = PBXGroup;
+			children = (
+				AA0000000000000000000002 /* ScribbyMac */,
+				AA0000000000000000000003 /* ScribbyMacTests */,
+				AA000000000000000000000C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		AA000000000000000000000C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AA0000000000000000000007 /* ScribbyMac.app */,
+				AA0000000000000000000008 /* ScribbyMacTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		AA0000000000000000000004 /* ScribbyMac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA0000000000000000000010 /* Build configuration list for PBXNativeTarget "ScribbyMac" */;
+			buildPhases = (
+				AA000000000000000000000D /* Sources */,
+				AA0000000000000000000009 /* Frameworks */,
+				AA000000000000000000000E /* Resources */,
+			);
+			buildRules = ();
+			dependencies = ();
+			fileSystemSynchronizedGroups = (AA0000000000000000000002 /* ScribbyMac */);
+			name = ScribbyMac;
+			packageProductDependencies = ();
+			productName = ScribbyMac;
+			productReference = AA0000000000000000000007 /* ScribbyMac.app */;
+			productType = "com.apple.product-type.application";
+		};
+		AA0000000000000000000005 /* ScribbyMacTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA0000000000000000000011 /* Build configuration list for PBXNativeTarget "ScribbyMacTests" */;
+			buildPhases = (
+				AA000000000000000000000F /* Sources */,
+				AA000000000000000000000A /* Frameworks */,
+			);
+			buildRules = ();
+			dependencies = (AA0000000000000000000017 /* PBXTargetDependency */);
+			fileSystemSynchronizedGroups = (AA0000000000000000000003 /* ScribbyMacTests */);
+			name = ScribbyMacTests;
+			packageProductDependencies = ();
+			productName = ScribbyMacTests;
+			productReference = AA0000000000000000000008 /* ScribbyMacTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		AA0000000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2660;
+				LastUpgradeCheck = 2660;
+				TargetAttributes = {
+					AA0000000000000000000004 = {CreatedOnToolsVersion = 26.6; };
+					AA0000000000000000000005 = {CreatedOnToolsVersion = 26.6; TestTargetID = AA0000000000000000000004; };
+				};
+			};
+			buildConfigurationList = AA0000000000000000000012 /* Build configuration list for PBXProject "ScribbyMac" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (en, Base);
+			mainGroup = AA000000000000000000000B;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = AA000000000000000000000C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (AA0000000000000000000004 /* ScribbyMac */, AA0000000000000000000005 /* ScribbyMacTests */);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AA000000000000000000000E /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AA000000000000000000000D /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		AA000000000000000000000F /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		AA0000000000000000000017 /* PBXTargetDependency */ = {isa = PBXTargetDependency; target = AA0000000000000000000004 /* ScribbyMac */; targetProxy = AA0000000000000000000016 /* PBXContainerItemProxy */; };
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		AA0000000000000000000020 /* Project Debug */ = {isa = XCBuildConfiguration; buildSettings = {ARCHS = arm64; CLANG_ENABLE_MODULES = YES; MACOSX_DEPLOYMENT_TARGET = 13.0; SDKROOT = macosx; SWIFT_VERSION = 6.0; }; name = Debug; };
+		AA0000000000000000000021 /* Project Release */ = {isa = XCBuildConfiguration; buildSettings = {ARCHS = arm64; CLANG_ENABLE_MODULES = YES; MACOSX_DEPLOYMENT_TARGET = 13.0; SDKROOT = macosx; SWIFT_COMPILATION_MODE = wholemodule; SWIFT_VERSION = 6.0; }; name = Release; };
+		AA0000000000000000000022 /* App Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ENABLE_APP_INTENTS_METADATA_EXTRACTION = NO;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_TESTABILITY = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = ScribbyMac/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.local.ScribbyMac;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = macosx;
+			};
+			name = Debug;
+		};
+		AA0000000000000000000023 /* App Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ENABLE_APP_INTENTS_METADATA_EXTRACTION = NO;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = ScribbyMac/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.local.ScribbyMac;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = macosx;
+			};
+			name = Release;
+		};
+		AA0000000000000000000024 /* Tests Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.local.ScribbyMacTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ScribbyMac.app/Contents/MacOS/ScribbyMac";
+			};
+			name = Debug;
+		};
+		AA0000000000000000000025 /* Tests Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.local.ScribbyMacTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ScribbyMac.app/Contents/MacOS/ScribbyMac";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AA0000000000000000000010 /* Build configuration list for PBXNativeTarget "ScribbyMac" */ = {isa = XCConfigurationList; buildConfigurations = (AA0000000000000000000022, AA0000000000000000000023); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		AA0000000000000000000011 /* Build configuration list for PBXNativeTarget "ScribbyMacTests" */ = {isa = XCConfigurationList; buildConfigurations = (AA0000000000000000000024, AA0000000000000000000025); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		AA0000000000000000000012 /* Build configuration list for PBXProject "ScribbyMac" */ = {isa = XCConfigurationList; buildConfigurations = (AA0000000000000000000020, AA0000000000000000000021); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+/* End XCConfigurationList section */
+	};
+	rootObject = AA0000000000000000000001 /* Project object */;
+}
