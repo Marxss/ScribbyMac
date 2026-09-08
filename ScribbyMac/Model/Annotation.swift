@@ -1,12 +1,12 @@
 import AppKit
 
-enum DrawingTool: CaseIterable {
+enum DrawingTool: CaseIterable, Hashable {
     case arrow
     case rectangle
     case text
 }
 
-enum AnnotationColor: CaseIterable {
+enum AnnotationColor: CaseIterable, Hashable {
     case red
     case yellow
     case green
@@ -26,7 +26,7 @@ enum AnnotationColor: CaseIterable {
     }
 }
 
-enum StrokeWidth: CGFloat, CaseIterable {
+enum StrokeWidth: CGFloat, CaseIterable, Hashable {
     case thin = 2
     case medium = 4
     case thick = 8
