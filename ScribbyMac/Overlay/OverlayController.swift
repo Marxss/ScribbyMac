@@ -10,6 +10,7 @@ final class OverlayController {
     private let logger = Logger(subsystem: "com.local.ScribbyMac", category: "overlay")
 
     var onPresentationChange: (() -> Void)?
+    var onToggleDrawingRequested: (() -> Void)?
     var state: OverlayState { stateMachine.state }
     var menuPresentation: MenuPresentation {
         .make(state: state, hasAnnotations: store.hasAnnotations)
@@ -23,7 +24,7 @@ final class OverlayController {
         },
         onUndo: { [weak self] in self?.undo() },
         onClear: { [weak self] in self?.clearAnnotations() },
-        onDone: { [weak self] in self?.toggleDrawing() }
+        onDone: { [weak self] in self?.onToggleDrawingRequested?() }
     )
 
     init(store: AnnotationStore) {
@@ -38,7 +39,7 @@ final class OverlayController {
     }
 
     func toggleDrawing() {
-        if state != .drawing, NSScreen.main == nil {
+        if state != .drawing, NSScreen.screens.first == nil {
             logger.error("Cannot enter drawing mode because no main screen is available")
             return
         }
@@ -64,7 +65,7 @@ final class OverlayController {
     }
 
     func showAnnotations() {
-        guard store.hasAnnotations, NSScreen.main != nil else { return }
+        guard store.hasAnnotations, NSScreen.screens.first != nil else { return }
         stateMachine.handle(.show(hasAnnotations: true))
         applyState()
     }
@@ -84,14 +85,14 @@ final class OverlayController {
     private func applyState() {
         switch state {
         case .drawing:
-            guard let screen = NSScreen.main else { return }
+            guard let screen = NSScreen.screens.first else { return }
             let window = ensureOverlayWindow(on: screen)
             window.ignoresMouseEvents = false
             canvas.borderVisible = true
             window.makeKeyAndOrderFront(nil)
             toolbar.show(on: screen)
         case .passThrough:
-            guard let screen = NSScreen.main else {
+            guard let screen = NSScreen.screens.first else {
                 stateMachine.handle(.hide)
                 applyState()
                 return
@@ -117,6 +118,7 @@ final class OverlayController {
             return overlayWindow
         }
         let window = OverlayWindow(frame: screen.frame)
+        window.onUndo = { [weak self] in self?.undo() }
         canvas.frame = CGRect(origin: .zero, size: screen.frame.size)
         canvas.autoresizingMask = [.width, .height]
         window.contentView = canvas

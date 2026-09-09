@@ -1,6 +1,16 @@
 import AppKit
 
 final class OverlayWindow: NSWindow {
+    var onUndo: (() -> Void)?
+
+    override func performKeyEquivalent(with event: NSEvent) -> Bool {
+        if event.modifierFlags.intersection(.deviceIndependentFlagsMask) == .command,
+           event.charactersIgnoringModifiers?.lowercased() == "z" {
+            onUndo?()
+            return true
+        }
+        return super.performKeyEquivalent(with: event)
+    }
     init(frame: CGRect) {
         super.init(
             contentRect: frame,

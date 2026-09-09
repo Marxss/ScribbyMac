@@ -14,13 +14,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var overlayController: OverlayController?
     private var statusMenuController: StatusMenuController?
     private var hotKeyController: GlobalHotKeyController?
-    private weak var previouslyActiveApplication: NSRunningApplication?
+    private var previouslyActiveApplication: NSRunningApplication?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.accessory)
 
         let store = AnnotationStore()
         let overlayController = OverlayController(store: store)
+        overlayController.onToggleDrawingRequested = { [weak self] in self?.toggleDrawing() }
         let statusMenuController = StatusMenuController(
             presentation: { [weak overlayController] in
                 overlayController?.menuPresentation
@@ -78,8 +79,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private func showHotKeyRegistrationError(_ error: Error) {
         let alert = NSAlert()
         alert.alertStyle = .warning
-        alert.messageText = "无法注册全局快捷键 (AppConfiguration.globalHotKeyDisplay)"
-        alert.informativeText = "(error.localizedDescription)\n仍可从菜单栏开始绘图。"
+        alert.messageText = "无法注册全局快捷键 " + AppConfiguration.globalHotKeyDisplay
+        alert.informativeText = error.localizedDescription + "\n仍可从菜单栏开始绘图。"
         alert.addButton(withTitle: "好")
         alert.runModal()
     }

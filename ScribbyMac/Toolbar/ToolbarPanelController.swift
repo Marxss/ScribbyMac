@@ -52,7 +52,7 @@ final class ToolbarPanelController: NSWindowController {
         let frame = panel.frame
         let origin = CGPoint(
             x: screen.frame.midX - frame.width / 2,
-            y: screen.frame.maxY - frame.height - 12
+            y: screen.visibleFrame.maxY - frame.height - 12
         )
         panel.setFrameOrigin(origin)
         panel.orderFrontRegardless()
@@ -131,7 +131,7 @@ final class ToolbarPanelController: NSWindowController {
             let button = NSButton(title: String(Int(width.rawValue)), target: self, action: #selector(selectWidth(_:)))
             button.tag = index
             button.bezelStyle = .texturedRounded
-            button.toolTip = "线宽 (Int(width.rawValue))"
+            button.toolTip = "线宽 " + String(Int(width.rawValue))
             widthButtons.append(button)
             stack.addArrangedSubview(button)
         }
