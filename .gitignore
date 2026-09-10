@@ -2,3 +2,4 @@
 .worktrees/
 /build/
 /dist/
+.DS_Store
