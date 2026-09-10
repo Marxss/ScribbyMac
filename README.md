@@ -100,4 +100,4 @@ Swift 6、AppKit、Core Graphics、Carbon、XCTest。项目不依赖第三方库
 
 ## 许可证
 
-项目暂未选择开源许可证。正式公开仓库前，请在根目录加入 `LICENSE` 文件；在没有许可证之前，默认不授予他人复制、修改或分发代码的权利。
+本项目采用 [MIT License](LICENSE) 开源。
