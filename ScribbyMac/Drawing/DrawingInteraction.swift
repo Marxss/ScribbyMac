@@ -1,6 +1,7 @@
 import CoreGraphics
 
 enum DrawingDraft: Equatable {
+    case freehand(points: [CGPoint], style: DrawingStyle)
     case arrow(start: CGPoint, current: CGPoint, style: DrawingStyle)
     case rectangle(start: CGPoint, current: CGPoint, style: DrawingStyle)
     case text(origin: CGPoint, style: DrawingStyle)
@@ -11,6 +12,8 @@ struct DrawingInteraction {
 
     mutating func begin(at point: CGPoint, tool: DrawingTool, style: DrawingStyle) {
         switch tool {
+        case .freehand:
+            draft = .freehand(points: [point], style: style)
         case .arrow:
             draft = .arrow(start: point, current: point, style: style)
         case .rectangle:
@@ -22,6 +25,10 @@ struct DrawingInteraction {
 
     mutating func update(to point: CGPoint) {
         switch draft {
+        case .freehand(var points, let style):
+            guard points.last != point else { return }
+            points.append(point)
+            draft = .freehand(points: points, style: style)
         case let .arrow(start, _, style):
             draft = .arrow(start: start, current: point, style: style)
         case let .rectangle(start, _, style):
@@ -32,7 +39,12 @@ struct DrawingInteraction {
     }
 
     mutating func finish(at point: CGPoint) -> Annotation? {
+        update(to: point)
         switch draft {
+        case let .freehand(points, style):
+            draft = nil
+            guard points.count > 1 else { return nil }
+            return .freehand(FreehandAnnotation(points: points, style: style))
         case let .arrow(start, _, style):
             draft = nil
             guard AnnotationGeometry.arrowHead(

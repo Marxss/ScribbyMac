@@ -124,6 +124,8 @@ final class DrawingCanvasView: NSView, NSTextFieldDelegate {
 
     private var previewAnnotation: Annotation? {
         switch interaction.draft {
+        case let .freehand(points, style):
+            return .freehand(FreehandAnnotation(points: points, style: style))
         case let .arrow(start, current, style):
             guard AnnotationGeometry.arrowHead(
                 from: start,
@@ -206,6 +208,7 @@ final class DrawingCanvasView: NSView, NSTextFieldDelegate {
 private extension Annotation {
     var style: DrawingStyle? {
         switch self {
+        case let .freehand(annotation): annotation.style
         case let .arrow(annotation): annotation.style
         case let .rectangle(annotation): annotation.style
         case .text: nil

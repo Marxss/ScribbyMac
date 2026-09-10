@@ -2,6 +2,20 @@ import XCTest
 @testable import ScribbyMac
 
 final class AnnotationRendererTests: XCTestCase {
+    func testFreehandPathFollowsEveryPointWithoutClosing() throws {
+        let points = [CGPoint.zero, CGPoint(x: 20, y: 40), CGPoint(x: 50, y: 10)]
+        let path = try XCTUnwrap(AnnotationRenderer.path(for: .freehand(
+            FreehandAnnotation(points: points, style: style))))
+        var renderedPoints: [CGPoint] = []
+        var types: [CGPathElementType] = []
+        path.applyWithBlock { element in
+            types.append(element.pointee.type)
+            renderedPoints.append(element.pointee.points[0])
+        }
+        XCTAssertEqual(types, [.moveToPoint, .addLineToPoint, .addLineToPoint])
+        XCTAssertEqual(renderedPoints, points)
+    }
+
     private let style = DrawingStyle(color: .red, strokeWidth: .medium)
 
     func testRectanglePathMatchesAnnotationBounds() throws {

@@ -2,6 +2,47 @@ import XCTest
 @testable import ScribbyMac
 
 final class DrawingInteractionTests: XCTestCase {
+    func testFreehandPreservesDraggedPointsAndReleasePoint() {
+        var interaction = DrawingInteraction()
+        let middle = CGPoint(x: 20, y: 30)
+        let end = CGPoint(x: 40, y: 5)
+        interaction.begin(at: .zero, tool: .freehand, style: redMedium)
+        interaction.update(to: middle)
+        interaction.update(to: middle)
+        XCTAssertEqual(interaction.draft, .freehand(points: [.zero, middle], style: redMedium))
+        XCTAssertEqual(interaction.finish(at: end),
+            .freehand(FreehandAnnotation(points: [.zero, middle, end], style: redMedium)))
+        XCTAssertNil(interaction.draft)
+    }
+
+    func testFreehandAllowsClosedLoopsAndRejectsClickWithoutDragging() {
+        var interaction = DrawingInteraction()
+        interaction.begin(at: .zero, tool: .freehand, style: redMedium)
+        XCTAssertNil(interaction.finish(at: .zero))
+        XCTAssertNil(interaction.draft)
+        interaction.begin(at: .zero, tool: .freehand, style: redMedium)
+        interaction.update(to: CGPoint(x: 20, y: 30))
+        XCTAssertNotNil(interaction.finish(at: .zero))
+        interaction.begin(at: .zero, tool: .freehand, style: redMedium)
+        interaction.cancel()
+        XCTAssertNil(interaction.finish(at: CGPoint(x: 20, y: 30)))
+    }
+
+    @MainActor
+    func testFreehandIsUndoneAsOneStrokeAndRestoredAfterClear() throws {
+        var interaction = DrawingInteraction()
+        interaction.begin(at: .zero, tool: .freehand, style: redMedium)
+        interaction.update(to: CGPoint(x: 10, y: 20))
+        let annotation = try XCTUnwrap(interaction.finish(at: CGPoint(x: 30, y: 10)))
+        let store = AnnotationStore()
+        store.add(annotation)
+        store.clear()
+        store.undo()
+        XCTAssertEqual(store.annotations, [annotation])
+        store.undo()
+        XCTAssertTrue(store.annotations.isEmpty)
+    }
+
     func testPastedMultilineTextIsCommittedAsSingleLine() {
         var interaction = DrawingInteraction()
         interaction.begin(at: .zero, tool: .text, style: DrawingStyle(color: .red, strokeWidth: .medium))

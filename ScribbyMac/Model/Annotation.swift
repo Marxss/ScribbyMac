@@ -1,6 +1,7 @@
 import AppKit
 
 enum DrawingTool: CaseIterable, Hashable {
+    case freehand
     case arrow
     case rectangle
     case text
@@ -43,6 +44,11 @@ enum TextSize: CGFloat, CaseIterable {
     case large = 36
 }
 
+struct FreehandAnnotation: Equatable {
+    let points: [CGPoint]
+    let style: DrawingStyle
+}
+
 struct ArrowAnnotation: Equatable {
     let start: CGPoint
     let end: CGPoint
@@ -69,6 +75,7 @@ struct TextAnnotation: Equatable {
 }
 
 enum Annotation: Equatable {
+    case freehand(FreehandAnnotation)
     case arrow(ArrowAnnotation)
     case rectangle(RectangleAnnotation)
     case text(TextAnnotation)

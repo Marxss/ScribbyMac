@@ -4,6 +4,21 @@ import XCTest
 
 final class ToolbarInteractionTests: XCTestCase {
     @MainActor
+    func testFreehandToolIsImmediatelyBeforeArrowAndSelectable() throws {
+        let store = AnnotationStore()
+        let toolbar = ToolbarPanelController(store: store,
+            onSelectTool: { store.select(tool: $0) }, onUndo: {}, onClear: {}, onDone: {})
+        let content = try XCTUnwrap(toolbar.window?.contentView)
+        let stack = try XCTUnwrap(content.subviews.first as? NSStackView)
+        let buttons = stack.arrangedSubviews.compactMap { $0 as? NSButton }
+        let index = try XCTUnwrap(buttons.firstIndex { $0.toolTip == "自由绘制" })
+        XCTAssertEqual(buttons[index + 1].toolTip, "箭头")
+        buttons[index].performClick(nil)
+        XCTAssertEqual(buttons[index].state, .on)
+        XCTAssertEqual(buttons[index + 1].state, .off)
+    }
+
+    @MainActor
     func testToolSelectionRemainsHighlightedAfterMouseActionCompletes() throws {
         let store = AnnotationStore()
         let toolbar = ToolbarPanelController(store: store,

@@ -25,7 +25,7 @@ final class ToolbarPanelController: NSWindowController {
         self.onDone = onDone
 
         let panel = NSPanel(
-            contentRect: CGRect(x: 0, y: 0, width: 610, height: 54),
+            contentRect: CGRect(x: 0, y: 0, width: 651, height: 54),
             styleMask: [.borderless, .nonactivatingPanel],
             backing: .buffered,
             defer: false
@@ -112,8 +112,8 @@ final class ToolbarPanelController: NSWindowController {
             stack.bottomAnchor.constraint(equalTo: background.bottomAnchor),
         ])
 
-        let symbols = ["arrow.up.right", "rectangle", "textformat"]
-        let tooltips = ["箭头", "矩形", "文字"]
+        let symbols = ["scribble", "arrow.up.right", "rectangle", "textformat"]
+        let tooltips = ["自由绘制", "箭头", "矩形", "文字"]
         for index in DrawingTool.allCases.indices {
             let button = symbolButton(symbols[index], tooltip: tooltips[index], action: #selector(selectTool(_:)))
             button.setButtonType(.pushOnPushOff)

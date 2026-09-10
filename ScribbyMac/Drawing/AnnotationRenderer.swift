@@ -4,6 +4,12 @@ enum AnnotationRenderer {
     static func path(for annotation: Annotation) -> CGPath? {
         let path = CGMutablePath()
         switch annotation {
+        case let .freehand(stroke):
+            guard stroke.points.count > 1, let first = stroke.points.first else { return nil }
+            path.move(to: first)
+            for point in stroke.points.dropFirst() {
+                path.addLine(to: point)
+            }
         case let .arrow(arrow):
             guard let head = AnnotationGeometry.arrowHead(
                 from: arrow.start,
