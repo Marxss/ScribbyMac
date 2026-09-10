@@ -27,7 +27,7 @@ ScribbyMac 是一个轻量的 macOS 菜单栏屏幕标注工具，适合演示�
 要求：Apple Silicon Mac、macOS 13 或更高版本、Xcode 26。
 
 ```sh
-git clone https://github.com/your-name/ScribbyMac.git
+git clone https://github.com/Marxss/ScribbyMac.git
 cd ScribbyMac
 bash scripts/build-local-app.sh
 open dist/ScribbyMac.app
