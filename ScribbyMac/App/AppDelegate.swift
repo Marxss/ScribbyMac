@@ -18,6 +18,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.accessory)
+        // Unit-test hosts must not register a competing global hotkey or show modal alerts.
+        guard NSClassFromString("XCTestCase") == nil else { return }
 
         let store = AnnotationStore()
         let overlayController = OverlayController(store: store)

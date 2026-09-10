@@ -52,12 +52,14 @@ struct DrawingInteraction {
         }
     }
 
-    mutating func commitText(_ text: String) -> Annotation? {
+    mutating func commitText(_ text: String, fontSize: CGFloat = 24) -> Annotation? {
         guard case let .text(origin, style) = draft else { return nil }
         draft = nil
-        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmed = text.components(separatedBy: .newlines)
+            .filter { !$0.isEmpty }.joined(separator: " ")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return nil }
-        return .text(TextAnnotation(origin: origin, text: trimmed, color: style.color))
+        return .text(TextAnnotation(origin: origin, text: trimmed, color: style.color, fontSize: fontSize))
     }
 
     mutating func cancel() {

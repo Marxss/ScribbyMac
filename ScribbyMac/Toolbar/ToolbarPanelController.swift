@@ -30,7 +30,9 @@ final class ToolbarPanelController: NSWindowController {
             backing: .buffered,
             defer: false
         )
-        panel.level = .floating
+        // Activation can raise the key overlay window. Keep controls above its hit-test surface.
+        panel.level = NSWindow.Level(rawValue: NSWindow.Level.floating.rawValue + 1)
+        panel.title = "ScribbyMac 工具栏"
         panel.isOpaque = false
         panel.backgroundColor = .clear
         panel.hasShadow = true
@@ -73,7 +75,17 @@ final class ToolbarPanelController: NSWindowController {
             button.layer?.borderColor = isSelected ? NSColor.controlAccentColor.cgColor : NSColor.separatorColor.cgColor
         }
         for (index, button) in widthButtons.enumerated() {
-            button.state = StrokeWidth.allCases[index] == store.selectedStrokeWidth ? .on : .off
+            if store.selectedTool == .text {
+                let size = TextSize.allCases[index]
+                button.title = String(Int(size.rawValue))
+                button.toolTip = "字号 " + button.title
+                button.state = size == store.selectedTextSize ? .on : .off
+            } else {
+                let width = StrokeWidth.allCases[index]
+                button.title = String(Int(width.rawValue))
+                button.toolTip = "线宽 " + button.title
+                button.state = width == store.selectedStrokeWidth ? .on : .off
+            }
         }
     }
 
@@ -104,6 +116,7 @@ final class ToolbarPanelController: NSWindowController {
         let tooltips = ["箭头", "矩形", "文字"]
         for index in DrawingTool.allCases.indices {
             let button = symbolButton(symbols[index], tooltip: tooltips[index], action: #selector(selectTool(_:)))
+            button.setButtonType(.pushOnPushOff)
             button.tag = index
             toolButtons.append(button)
             stack.addArrangedSubview(button)
@@ -115,6 +128,7 @@ final class ToolbarPanelController: NSWindowController {
             button.tag = index
             button.title = ""
             button.isBordered = false
+            button.refusesFirstResponder = true
             button.wantsLayer = true
             button.layer?.cornerRadius = 11
             button.layer?.backgroundColor = color.nsColor.cgColor
@@ -131,6 +145,8 @@ final class ToolbarPanelController: NSWindowController {
             let button = NSButton(title: String(Int(width.rawValue)), target: self, action: #selector(selectWidth(_:)))
             button.tag = index
             button.bezelStyle = .texturedRounded
+            button.setButtonType(.pushOnPushOff)
+            button.refusesFirstResponder = true
             button.toolTip = "线宽 " + String(Int(width.rawValue))
             widthButtons.append(button)
             stack.addArrangedSubview(button)
@@ -145,6 +161,7 @@ final class ToolbarPanelController: NSWindowController {
     private func symbolButton(_ symbol: String, tooltip: String, action: Selector) -> NSButton {
         let button = NSButton(image: NSImage(systemSymbolName: symbol, accessibilityDescription: tooltip) ?? NSImage(), target: self, action: action)
         button.bezelStyle = .texturedRounded
+        button.refusesFirstResponder = true
         button.imagePosition = .imageOnly
         button.toolTip = tooltip
         button.widthAnchor.constraint(equalToConstant: 34).isActive = true
@@ -155,6 +172,7 @@ final class ToolbarPanelController: NSWindowController {
         let box = NSBox()
         box.boxType = .separator
         box.heightAnchor.constraint(equalToConstant: 28).isActive = true
+        box.widthAnchor.constraint(equalToConstant: 1).isActive = true
         return box
     }
 
@@ -172,7 +190,11 @@ final class ToolbarPanelController: NSWindowController {
 
     @objc private func selectWidth(_ sender: NSButton) {
         guard StrokeWidth.allCases.indices.contains(sender.tag) else { return }
-        store.select(strokeWidth: StrokeWidth.allCases[sender.tag])
+        if store.selectedTool == .text {
+            store.select(textSize: TextSize.allCases[sender.tag])
+        } else {
+            store.select(strokeWidth: StrokeWidth.allCases[sender.tag])
+        }
         refresh()
     }
 

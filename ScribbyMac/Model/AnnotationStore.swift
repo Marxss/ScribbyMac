@@ -12,6 +12,13 @@ final class AnnotationStore {
     private(set) var selectedColor: AnnotationColor = .red
     private(set) var selectedStrokeWidth: StrokeWidth = .medium
     var onChange: (() -> Void)?
+    private(set) var selectedTextSize: TextSize = .medium
+    var onTextSizeChange: (() -> Void)?
+
+    func select(textSize: TextSize) {
+        selectedTextSize = textSize
+        onTextSizeChange?()
+    }
 
     private var undoEntries: [UndoEntry] = []
 

@@ -10,10 +10,20 @@ final class DrawingCanvasView: NSView, NSTextFieldDelegate {
         didSet { needsDisplay = true }
     }
     var onAnnotationsChanged: (() -> Void)?
+    var onEndDrawingRequested: (() -> Void)?
+
+    override func cancelOperation(_ sender: Any?) {
+        if activeTextField != nil {
+            cancelPendingInteraction()
+        } else {
+            onEndDrawingRequested?()
+        }
+    }
 
     init(frame frameRect: NSRect = .zero, store: AnnotationStore) {
         self.store = store
         super.init(frame: frameRect)
+        store.onTextSizeChange = { [weak self] in self?.updateTextEditorSize() }
     }
 
     @available(*, unavailable)
@@ -43,6 +53,7 @@ final class DrawingCanvasView: NSView, NSTextFieldDelegate {
     }
 
     override func mouseDown(with event: NSEvent) {
+        commitPendingText()
         let point = convert(event.locationInWindow, from: nil)
         let style = DrawingStyle(
             color: store.selectedColor,
@@ -50,8 +61,10 @@ final class DrawingCanvasView: NSView, NSTextFieldDelegate {
         )
         if store.selectedTool == .text {
             cancelPendingInteraction()
-            interaction.begin(at: point, tool: .text, style: style)
-            beginTextEditing(at: point, color: style.color)
+            let origin = CGPoint(x: min(max(0, point.x), max(0, bounds.width - 1)),
+                                 y: min(max(0, point.y), max(0, bounds.height - store.selectedTextSize.rawValue - 10)))
+            interaction.begin(at: origin, tool: .text, style: style)
+            beginTextEditing(at: origin, color: style.color)
         } else {
             interaction.begin(at: point, tool: store.selectedTool, style: style)
             needsDisplay = true
@@ -81,6 +94,11 @@ final class DrawingCanvasView: NSView, NSTextFieldDelegate {
         needsDisplay = true
     }
 
+    func finishPendingInteraction() {
+        commitPendingText()
+        cancelPendingInteraction()
+    }
+
     func control(
         _ control: NSControl,
         textView: NSTextView,
@@ -100,7 +118,7 @@ final class DrawingCanvasView: NSView, NSTextFieldDelegate {
 
     func controlTextDidEndEditing(_ obj: Notification) {
         if activeTextField != nil {
-            cancelPendingInteraction()
+            commitPendingText(restoreFocus: false)
         }
     }
 
@@ -146,26 +164,37 @@ final class DrawingCanvasView: NSView, NSTextFieldDelegate {
     }
 
     private func beginTextEditing(at origin: CGPoint, color: AnnotationColor) {
-        let field = NSTextField(frame: CGRect(x: origin.x, y: origin.y, width: 320, height: 34))
+        let field = NSTextField(frame: CGRect(x: origin.x, y: origin.y, width: min(320, bounds.width - origin.x), height: min(34, bounds.height)))
+        field.usesSingleLineMode = true
         field.isBordered = false
         field.drawsBackground = false
         field.focusRingType = .none
-        field.font = .systemFont(ofSize: 24)
+        field.font = .systemFont(ofSize: store.selectedTextSize.rawValue)
         field.textColor = color.nsColor
         field.delegate = self
         field.cell?.wraps = false
         field.cell?.isScrollable = true
         addSubview(field)
         activeTextField = field
+        updateTextEditorSize()
         window?.makeFirstResponder(field)
     }
 
-    private func commitPendingText() {
+    private func updateTextEditorSize() {
+        guard let field = activeTextField else { return }
+        let size = store.selectedTextSize.rawValue
+        field.font = .systemFont(ofSize: size)
+        field.currentEditor()?.font = field.font
+        field.frame.size.height = min(size + 10, bounds.height - field.frame.minY)
+    }
+
+    private func commitPendingText(restoreFocus: Bool = true) {
         guard let field = activeTextField else { return }
         activeTextField = nil
-        let annotation = interaction.commitText(field.stringValue)
+        let text = field.currentEditor()?.string ?? field.stringValue
+        let annotation = interaction.commitText(text, fontSize: store.selectedTextSize.rawValue)
         field.removeFromSuperview()
-        window?.makeFirstResponder(self)
+        if restoreFocus { window?.makeFirstResponder(self) }
         if let annotation {
             store.add(annotation)
             onAnnotationsChanged?()

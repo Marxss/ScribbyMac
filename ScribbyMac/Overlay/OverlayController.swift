@@ -19,7 +19,7 @@ final class OverlayController {
     private lazy var toolbar = ToolbarPanelController(
         store: store,
         onSelectTool: { [weak self] tool in
-            self?.canvas.cancelPendingInteraction()
+            self?.canvas.finishPendingInteraction()
             self?.store.select(tool: tool)
         },
         onUndo: { [weak self] in self?.undo() },
@@ -30,6 +30,10 @@ final class OverlayController {
     init(store: AnnotationStore) {
         self.store = store
         canvas = DrawingCanvasView(store: store)
+        canvas.onEndDrawingRequested = { [weak self] in
+            guard let self, self.state == .drawing else { return }
+            self.onToggleDrawingRequested?()
+        }
         store.onChange = { [weak self] in
             guard let self else { return }
             self.canvas.needsDisplay = true
@@ -44,7 +48,7 @@ final class OverlayController {
             return
         }
         if state == .drawing {
-            canvas.cancelPendingInteraction()
+            canvas.finishPendingInteraction()
         }
         stateMachine.handle(.toggleDrawing(hasAnnotations: store.hasAnnotations))
         applyState()
@@ -59,7 +63,7 @@ final class OverlayController {
     }
 
     func hideAnnotations() {
-        canvas.cancelPendingInteraction()
+        canvas.finishPendingInteraction()
         stateMachine.handle(.hide)
         applyState()
     }
@@ -119,6 +123,7 @@ final class OverlayController {
         }
         let window = OverlayWindow(frame: screen.frame)
         window.onUndo = { [weak self] in self?.undo() }
+        window.onEscape = { [weak self] in self?.canvas.cancelOperation(nil) }
         canvas.frame = CGRect(origin: .zero, size: screen.frame.size)
         canvas.autoresizingMask = [.width, .height]
         window.contentView = canvas

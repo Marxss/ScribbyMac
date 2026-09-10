@@ -37,6 +37,12 @@ struct DrawingStyle: Equatable {
     let strokeWidth: StrokeWidth
 }
 
+enum TextSize: CGFloat, CaseIterable {
+    case small = 18
+    case medium = 24
+    case large = 36
+}
+
 struct ArrowAnnotation: Equatable {
     let start: CGPoint
     let end: CGPoint

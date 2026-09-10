@@ -2,6 +2,14 @@ import XCTest
 @testable import ScribbyMac
 
 final class DrawingInteractionTests: XCTestCase {
+    func testPastedMultilineTextIsCommittedAsSingleLine() {
+        var interaction = DrawingInteraction()
+        interaction.begin(at: .zero, tool: .text, style: DrawingStyle(color: .red, strokeWidth: .medium))
+        guard case let .text(text) = interaction.commitText("第一行\n第二行\r\n第三行") else {
+            return XCTFail("Expected committed text")
+        }
+        XCTAssertEqual(text.text, "第一行 第二行 第三行")
+    }
     private let redMedium = DrawingStyle(color: .red, strokeWidth: .medium)
 
     func testArrowGestureProducesAnnotation() {
